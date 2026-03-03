@@ -80,7 +80,7 @@ public class Movimiento : MonoBehaviour
         // tipos genéricos
         // mecanismo que permite parametrizar un tipo para un objeto o método
         Vector2 desplazamiento = inputActions.Player.Move.ReadValue<Vector2>();
-        Debug.Log(desplazamiento);
+        //Debug.Log(desplazamiento);
 
         // las entradas vector2 tienen rango [-1, 1]
         // transform (t minúscula)
@@ -92,7 +92,7 @@ public class Movimiento : MonoBehaviour
 
         // Time.deltaTime - cantidad de tiempo en segundos que ha transcurrido entre
         // el frame anterior y el actual
-        transform.Translate(desplazamiento * Time.deltaTime * _velocidad);
+        transform.Translate(desplazamiento * Time.deltaTime * _velocidad, Space.World);
     }
 
     void LateUpdate()
@@ -115,5 +115,61 @@ public class Movimiento : MonoBehaviour
     // requisitos:
     // - 2 o más objetos con colliders
     // - al menos 1 objeto tiene el componente rigidbody 
-    // - el objeto con rigidbody se está moviendo (TODO: EXPLICAR POR QUÉ)
+    // - el objeto con rigidbody se está moviendo 
+
+    // eventos en la colisión
+    void OnCollisionEnter(Collision collision)
+    {
+        // invocado cuando hay superposición en el cuadro actual
+        // PERO no había en el anterior
+        print("COLLISION ENTER");
+
+        // en el objeto collision (de tipo Collision)
+        // tenemos info de la colisión
+        // ejemplo: puntos de toque, fuerzas involucradas, referencias al otro objeto, etc
+        print(collision.transform.name);
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        // invocado cuando hay superposición en el cuadro actual
+        // y TAMBIÉN en el anterior
+        print("COLLISION STAY");
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        // invocado cuando NO hay superposición en el cuadro actual
+        // y SÍ HABÍA en el anterior
+        print("COLLISION EXIT");
+    }
+
+    // TRIGGERS
+    // colliders marcados como trigger
+    // pueden detectar colisión PERO no hay reacción física
+
+    void OnTriggerEnter(Collider other)
+    {
+        print("TRIGGER ENTER");
+        print(other.transform.tag);
+        print(other.gameObject.layer);
+
+        if(other.transform.tag == "Pruebita")
+            print("tag pruebita encontrada!");
+
+        if(other.gameObject.layer == 3)
+            print("layer EjemploLayer encontrada!");
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        print("TRIGGER STAY");
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        print("TRIGGER EXIT");
+    }
+
+    // para movimiento y colisiones también está charactercontroller
 }
