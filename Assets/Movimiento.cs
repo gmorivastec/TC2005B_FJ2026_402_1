@@ -1,6 +1,9 @@
 // using - "importar"
 // namespaces - "paquete"
 using UnityEngine;
+using TMPro;
+using UnityEngine.Assertions;
+
 
 public class Movimiento : MonoBehaviour
 {
@@ -9,6 +12,9 @@ public class Movimiento : MonoBehaviour
 
     [SerializeField]
     private float _velocidad = 5;
+
+    [SerializeField]
+    private TMP_Text _textito; // esto es suceptible a NULL REFERENCE EXCEPTION
 
     // CÓDIGO!
 
@@ -26,6 +32,9 @@ public class Movimiento : MonoBehaviour
     // se invoca una vez al inicio de la vida del componente
     void Awake()
     {
+
+        // fail quick
+        Assert.IsNotNull(_textito, "TEXTITO ES NULO EN MOVIMIENTO, FAVOR DE VERIFICAR");
         print("AWAKE");
         inputActions = new InputSystem_Actions();
     }
@@ -159,6 +168,8 @@ public class Movimiento : MonoBehaviour
 
         if(other.gameObject.layer == 3)
             print("layer EjemploLayer encontrada!");
+
+        _textito.text = other.transform.name;
     }
 
     void OnTriggerStay(Collider other)
@@ -172,4 +183,10 @@ public class Movimiento : MonoBehaviour
     }
 
     // para movimiento y colisiones también está charactercontroller
+
+    // función para escuchar botonazo
+    public void Botonazo()
+    {
+        _textito.text = "BOTONAZO!";
+    }
 }
