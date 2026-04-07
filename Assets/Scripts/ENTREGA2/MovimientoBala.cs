@@ -26,6 +26,8 @@ public class MovimientoBala : MonoBehaviour
 
         // VENDRÁ EN EL QUIZ?!
         // cuando hagamos "Instantiate" hay que tener "Destroy"
-        Destroy(gameObject);
+        // Destroy(gameObject);
+
+        PoolManager.Instance.ReturnObject(this);
     }
 }

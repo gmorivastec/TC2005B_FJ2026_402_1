@@ -8,8 +8,12 @@ public class MovimientoNave : MonoBehaviour
     [SerializeField]
     private float _velocidad = 5;
 
+    // maneras de obtener referencias a game objects (QUIZ?!)
+    // 1era - como un parametro que se establece en el editor
+    // es facil y es eficiente PERO no se puede ejecutar en runtime
     [SerializeField]
     private GameObject _original;
+    
 
     // CORRUTINAS
     // mecanismo que utiliza Unity para trabajar con pseudoconcurrencia (QUIZ?!?!)
@@ -50,6 +54,12 @@ public class MovimientoNave : MonoBehaviour
         StartCoroutine("EjemploLineal");
         StartCoroutine(EjemploLineal());
         _corrutina = StartCoroutine(_enumeratorCorrutina);
+
+
+        // 2da opcion para obtener referencia a un game object
+        // - es mas lenta 
+        // - recomendacion: si la necesitas usala en start / awake
+        GameObject dummy = GameObject.Find("PoolManager");
     }
 
     // Update is called once per frame
@@ -63,6 +73,13 @@ public class MovimientoNave : MonoBehaviour
         if(inputActions.Player.Jump.triggered)
         {
             print("DISPARO!");
+
+            // 3era manera - con el singleton! 
+            // cual es la complejidad?
+            // - acceso rapido (O(1))
+            PoolManager.Instance.DecirHola();
+
+            /*
             // para crear clones de gameobjects 
             // utilizamos un método que se llama instantiate
             Instantiate(
@@ -70,11 +87,17 @@ public class MovimientoNave : MonoBehaviour
                 transform.position,
                 transform.rotation
                 );
+                */
+            
+            PoolManager.Instance.GetObject(
+                transform.position,
+                transform.rotation
+            );
         }
 
         // sólo para el ejemplo de corrutinas
         // polling directo a dispositivo
-        if(Input.GetKeyDown(KeyCode.C))
+        if(inputActions.Player.Crouch.triggered)
         {
             StopAllCoroutines();
             StopCoroutine("EjemploLineal");
@@ -97,7 +120,7 @@ public class MovimientoNave : MonoBehaviour
         WaitForSeconds espera = new WaitForSeconds(1);
         while(true)
         {
-            print("EJEMPLO CICLO DE CORRUTINA");
+            //print("EJEMPLO CICLO DE CORRUTINA");
             yield return espera;
         }
     }
