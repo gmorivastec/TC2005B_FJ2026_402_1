@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MovimientoNave : MonoBehaviour
 {
@@ -30,7 +31,7 @@ public class MovimientoNave : MonoBehaviour
     // - dependen directamente del componente: si el componente desaparece las corrutinas también
     // - la gestión de las corrutinas dependen del componente al que pertenezca
 
-    IEnumerator _enumeratorCorrutina;
+    IEnumerator _enumeratorCorrutina, _disparo;
     Coroutine _corrutina;
 
     void Awake()
@@ -60,6 +61,7 @@ public class MovimientoNave : MonoBehaviour
         // - es mas lenta 
         // - recomendacion: si la necesitas usala en start / awake
         GameObject dummy = GameObject.Find("PoolManager");
+        _disparo = Disparo();
     }
 
     // Update is called once per frame
@@ -70,6 +72,7 @@ public class MovimientoNave : MonoBehaviour
         transform.Translate(desplazamiento * Time.deltaTime * _velocidad, Space.World);
     
         // disparo
+        /*
         if(inputActions.Player.Jump.triggered)
         {
             print("DISPARO!");
@@ -88,11 +91,21 @@ public class MovimientoNave : MonoBehaviour
                 transform.rotation
                 );
                 */
-            
+          /*  
             PoolManager.Instance.GetObject(
                 transform.position,
                 transform.rotation
             );
+        }*/
+
+        if(inputActions.Player.Jump.WasPressedThisFrame())
+        {
+           StartCoroutine(_disparo); 
+        }
+
+        if(inputActions.Player.Jump.WasReleasedThisFrame())
+        {
+            StopCoroutine(_disparo);
         }
 
         // sólo para el ejemplo de corrutinas
@@ -122,6 +135,23 @@ public class MovimientoNave : MonoBehaviour
         {
             //print("EJEMPLO CICLO DE CORRUTINA");
             yield return espera;
+        }
+    }
+
+    IEnumerator Disparo()
+    {
+        WaitForSeconds espera = new WaitForSeconds(0.5f);
+        while(true)
+        {
+            PoolManager.Instance.GetObject(
+                transform.position,
+                transform.rotation
+            );
+
+            //print("EJEMPLO CICLO DE CORRUTINA");
+            yield return espera;
+
+            
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PoolManager : MonoBehaviour
 {
@@ -62,6 +63,18 @@ public class PoolManager : MonoBehaviour
     [SerializeField]
     private GameObject _original;
 
+    // UNITY EVENTS
+    // mecanismos que permiten un callback abstracto
+    // pueden checar el design pattern observer
+    // https://en.wikipedia.org/wiki/Observer_pattern
+
+    // Un evento es una manera efectiva de desacoplar el código
+
+
+    [SerializeField]
+    private UnityEvent _eventoSinArgs; 
+
+
     void Awake()
     {
         // hacer verificacion que asegura una sola instancia
@@ -122,5 +135,10 @@ public class PoolManager : MonoBehaviour
         _pool.Enqueue(returnedObject.gameObject);
         returnedObject.gameObject.SetActive(false);
         
+    }
+
+    public void OyenteEventoSinArgs()
+    {
+        print("EVENTO SIN ARGS DETONADO");
     }
 }
