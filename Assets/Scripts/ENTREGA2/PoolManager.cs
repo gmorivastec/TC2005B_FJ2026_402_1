@@ -105,6 +105,10 @@ public class PoolManager : MonoBehaviour
             // desactivamos
             instance.SetActive(false);
         }
+
+        // cuando tenemos un evento para avisar utilizamos el método
+        // Invoke del evento
+        _eventoSinArgs.Invoke();
     }
 
     // Update is called once per frame
